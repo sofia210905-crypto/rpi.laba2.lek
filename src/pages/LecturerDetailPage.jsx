@@ -1,20 +1,28 @@
 import { useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { teachers } from "../data/teachers";
 import CourseAccordion from "../components/CourseAccordion";
 import TariffCard from "../components/TariffCard";
 import BookingModal from "../components/BookingModal";
 
-export default function TeacherDetailPage({ id, onNavigate }) {
+export default function LecturerDetailPage() {
+  // id приходит из адреса /lecturers/:id — это строка, поэтому Number()
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
-  const teacher = teachers.find((t) => t.id === id);
+
+  const teacher = teachers.find((t) => t.id === Number(id));
 
   if (!teacher) {
     return (
-      <div>
-        <p>Преподаватель не найден.</p>
-        <button className="link-arrow" onClick={() => onNavigate("teachers")}>
+      <div className="not-found">
+        <h1 className="page-title">Лектор не найден</h1>
+        <p className="page-subtitle">
+          Лектора с номером «{id}» нет в нашем списке.
+        </p>
+        <Link className="link-arrow" to="/lecturers">
           ← Вернуться к списку
-        </button>
+        </Link>
       </div>
     );
   }
@@ -28,8 +36,8 @@ export default function TeacherDetailPage({ id, onNavigate }) {
   return (
     <>
       <div className="teacher-detail">
-        <button className="back-link" onClick={() => onNavigate("teachers")}>
-          ← Все лекторы
+        <button className="back-link" onClick={() => navigate("/lecturers")}>
+          ← Назад к списку
         </button>
 
         {/* ============ ВЕРХНИЙ БЛОК ============ */}

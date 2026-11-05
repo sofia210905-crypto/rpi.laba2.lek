@@ -1,8 +1,8 @@
 import { useState, useDeferredValue, useMemo } from "react";
 import { teachers } from "../data/teachers";
-import TeacherCard from "../components/TeacherCard";
+import LecturerCard from "../components/LecturerCard";
 
-export default function TeachersPage({ onNavigate }) {
+export default function LecturersPage() {
   const [query, setQuery] = useState("");
   const [genderFilter, setGenderFilter] = useState("all");
 
@@ -70,11 +70,7 @@ export default function TeachersPage({ onNavigate }) {
           className={"teachers-grid" + (isStale ? " teachers-grid--stale" : "")}
         >
           {filtered.map((t) => (
-            <TeacherCard
-              key={t.id}
-              teacher={t}
-              onNavigate={onNavigate}
-            />
+            <LecturerCard key={t.id} lecturer={t} />
           ))}
         </div>
       )}

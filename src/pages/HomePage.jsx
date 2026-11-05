@@ -1,9 +1,10 @@
+import { Link } from "react-router-dom";
 import { partners } from "../data/partners";
 import { teachers } from "../data/teachers";
 import PartnerCard from "../components/PartnerCard";
-import TeacherCard from "../components/TeacherCard";
+import LecturerCard from "../components/LecturerCard";
 
-export default function HomePage({ onNavigate }) {
+export default function HomePage() {
   const featuredTeachers = teachers.slice(0, 3);
 
   return (
@@ -29,12 +30,9 @@ export default function HomePage({ onNavigate }) {
             Наши лекторы — <em>признанные специалисты</em> в своих областях,
             готовые делиться опытом и знаниями.
           </h2>
-          <button
-            className="link-arrow"
-            onClick={() => onNavigate("teachers")}
-          >
+          <Link className="link-arrow" to="/lecturers">
             Найти лектора
-          </button>
+          </Link>
         </div>
       </section>
 
@@ -100,20 +98,13 @@ export default function HomePage({ onNavigate }) {
       <section className="section">
         <div className="section-header-row">
           <h2 className="section-title">Лекторы</h2>
-          <button
-            className="link-arrow"
-            onClick={() => onNavigate("teachers")}
-          >
+          <Link className="link-arrow" to="/lecturers">
             Все лекторы →
-          </button>
+          </Link>
         </div>
         <div className="teachers-grid">
           {featuredTeachers.map((t) => (
-            <TeacherCard
-              key={t.id}
-              teacher={t}
-              onNavigate={onNavigate}
-            />
+            <LecturerCard key={t.id} lecturer={t} />
           ))}
         </div>
       </section>

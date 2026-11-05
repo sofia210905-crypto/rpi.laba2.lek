@@ -1,4 +1,6 @@
-export default function Footer({ onNavigate }) {
+import { Link } from "react-router-dom";
+
+export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
@@ -16,24 +18,24 @@ export default function Footer({ onNavigate }) {
           <h4 className="footer-title">Навигация</h4>
           <ul className="footer-list">
             <li>
-              <button className="footer-link" onClick={() => onNavigate("home")}>
+              <Link className="footer-link" to="/">
                 Главная
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="footer-link" onClick={() => onNavigate("partners")}>
+              <Link className="footer-link" to="/partners">
                 Партнёры
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="footer-link" onClick={() => onNavigate("about")}>
+              <Link className="footer-link" to="/about">
                 О нас
-              </button>
+              </Link>
             </li>
             <li>
-              <button className="footer-link" onClick={() => onNavigate("teachers")}>
+              <Link className="footer-link" to="/lecturers">
                 Лекторы
-              </button>
+              </Link>
             </li>
           </ul>
         </div>
