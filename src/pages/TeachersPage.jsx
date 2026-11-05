@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useDeferredValue, useMemo } from "react";
 import { teachers } from "../data/teachers";
 import TeacherCard from "../components/TeacherCard";
 
@@ -6,14 +6,20 @@ export default function TeachersPage({ onNavigate }) {
   const [query, setQuery] = useState("");
   const [genderFilter, setGenderFilter] = useState("all");
 
-  const filtered = teachers.filter((t) => {
-    const matchesQuery = t.name
-      .toLowerCase()
-      .includes(query.toLowerCase());
-    const matchesGender =
-      genderFilter === "all" || t.gender === genderFilter;
-    return matchesQuery && matchesGender;
-  });
+  const deferredQuery = useDeferredValue(query);
+
+  const isStale = query !== deferredQuery;
+
+  const filtered = useMemo(() => {
+    return teachers.filter((t) => {
+      const matchesQuery = t.name
+        .toLowerCase()
+        .includes(deferredQuery.toLowerCase());
+      const matchesGender =
+        genderFilter === "all" || t.gender === genderFilter;
+      return matchesQuery && matchesGender;
+    });
+  }, [deferredQuery, genderFilter]);
 
   return (
     <div>
@@ -23,15 +29,19 @@ export default function TeachersPage({ onNavigate }) {
         и знаниями.
       </p>
 
-      {/* ============ ФИЛЬТРЫ ============ */}
       <div className="filters">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Поиск по ФИО..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+        <div className="search-wrapper">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Поиск по ФИО..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          {isStale && (
+            <span className="search-stale">Обновление…</span>
+          )}
+        </div>
 
         <div className="gender-buttons">
           {[
@@ -53,11 +63,12 @@ export default function TeachersPage({ onNavigate }) {
         </div>
       </div>
 
-      {/* ============ СЕТКА ============ */}
       {filtered.length === 0 ? (
         <p className="empty-state">По вашему запросу ничего не найдено.</p>
       ) : (
-        <div className="teachers-grid">
+        <div
+          className={"teachers-grid" + (isStale ? " teachers-grid--stale" : "")}
+        >
           {filtered.map((t) => (
             <TeacherCard
               key={t.id}
@@ -69,4 +80,4 @@ export default function TeachersPage({ onNavigate }) {
       )}
     </div>
   );
-}   
+}
